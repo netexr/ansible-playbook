@@ -1,0 +1,14 @@
+---
+
+- name: start app
+  shell: sh ctrl.sh start
+  args:
+    chdir: '{{  APP_ROOT }}'
+  when: tostart.stdout|int == 1
+
+
+- name: stop app
+  shell: sh ctrl.sh stop
+  args:
+    chdir: '{{  APP_ROOT }}'
+  when: tostop.stdout|int > 1

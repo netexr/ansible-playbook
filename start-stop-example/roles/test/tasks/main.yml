@@ -1,0 +1,43 @@
+---
+
+- name: copy ctrl script to target
+  copy:
+    src: ctrl.sh
+    dest: '{{ APP_ROOT }}'
+    mode: 0755
+
+- name: stop the process when process exists
+  shell: ps aux|grep java|grep Test|wc -l
+  register: tostop
+  when: stop == 1 or restart == 1
+  notify:
+    stop app
+  tags:
+    - stopapp
+    - restartapp
+
+- name: stop first
+  meta:
+    flush_handlers
+
+- name: wait for listen port to stop
+  wait_for:
+    port: '{{ APP_PORT }}'
+    delay: 2
+    state: stopped
+    timeout: 30
+    sleep: 3
+    msg: "process stop failed in 30 seconds, please check!"
+  when: stop == 1 or restart == 1
+  tags:
+    - stopapp
+    - restartapp
+
+- name: start app when process is not exist
+  shell: ps aux|grep java|grep Test|wc -l
+  register: tostart
+  notify:
+    start app
+  tags:
+    - startapp
+    - restartapp

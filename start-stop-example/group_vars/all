@@ -1,0 +1,4 @@
+APP_ROOT: /data/app
+APP_PORT: 9000
+stop: 0
+restart: 0
