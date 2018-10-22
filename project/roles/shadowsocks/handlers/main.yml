@@ -5,3 +5,6 @@
   async: 0
   poll: 0
   ignore_errors: true
+
+- name: update grub
+  command: grub2-set-default 0

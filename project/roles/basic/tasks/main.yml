@@ -30,7 +30,7 @@
 - name: add epel repo
   yum:
     name: epel-release
-    state: latest
+    state: present
 
 - name: change swappiness
   sysctl:

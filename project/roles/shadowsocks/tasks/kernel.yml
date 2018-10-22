@@ -13,4 +13,6 @@
     name: kernel-ml
     state: present
     enablerepo: elrepo-kernel
-  notify: reboot
+  notify:
+    - update grub
+    - reboot
