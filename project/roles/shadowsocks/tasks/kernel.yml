@@ -8,9 +8,10 @@
     name: https://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
     state: present
 
-- name: update kernel when linux kernel version is below 4.0
+- name: update kernel
   yum:
     name: kernel-ml
     state: absent
     enablerepo: elrepo-kernel
+    update_cache: yes
   notify: reboot
