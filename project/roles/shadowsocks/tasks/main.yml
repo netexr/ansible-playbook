@@ -1,15 +1,9 @@
 ---
 
-- name: get linux kernel version
-  command: uname -r
-  register: kernel
-  changed_when: False
-
 - name: update kernel
   include: kernel.yml
-  when: int(kernel.stdout[0]) < 4
+  when: ansible_kernel[0]|int < 4
   
-
 - name: install shadowsocks related soft
   yum:
     name: {{ item }}
