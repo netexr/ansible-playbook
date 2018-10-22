@@ -1,0 +1,62 @@
+---
+
+- name: playbook only works on CentOS 7
+  command: /usr/bin/uptime
+  ignore_errors: True
+  changed_when: False
+  failed_when: ansible_distribution != 'CentOS' or ansible_distribution_major_version != 7
+
+- name: Install basic soft
+  yum:
+    name: {{ item }}
+    state: latest
+  with_items:
+    - libselinux-python
+    - vim-enhanced
+    - wget
+    - net-tools
+    - bind-utils
+
+- name: Disable SELinux
+  selinux:
+    state: disabled
+  notify: reboot
+
+- name: Disable firwalld
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: add epel repo
+  yum:
+    name: epel-release
+    state: latest
+
+- name: change swappiness
+  sysctl:
+    name: vm.swappiness
+    value: 0
+    state: present
+    reload: yes
+    sysctl_set: yes
+
+- name: enable fast open
+  sysctl:
+    name: net.ipv4.tcp_fastopen
+    value: 3
+    state: present
+    reload: yes
+    sysctl_set: yes
+
+- name: enable bbr step 1
+  sysctl:
+    name: net.core.default_qdisc
+    value: fq
+    state: present
+
+- name: enable bbr step 2
+  sysctl:
+    name: net.ipv4.tcp_congestion_control
+    value: bbr
+    state: present

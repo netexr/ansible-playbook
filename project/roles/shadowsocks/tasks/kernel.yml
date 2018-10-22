@@ -1,0 +1,16 @@
+- name: import repo key
+  rpm_key:
+    state: present
+    key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+
+- name: install
+  apt_rpm:
+    pkg: https://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+    state: present
+
+- name: update kernel when linux kernel version is below 4.0
+  yum:
+    name: kernel-ml
+    state: absent
+    enablerepo: elrepo-kernel
+  notify: reboot

@@ -1,0 +1,3 @@
+SS_DIR: /usr/local/shadowsocks
+SS_PORT: 443
+SS_PASSWORD: helloworld

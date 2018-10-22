@@ -1,0 +1,53 @@
+---
+
+- name: get linux kernel version
+  command: uname -r
+  register: kernel
+  changed_when: False
+
+- name: update kernel
+  include: kernel.yml
+  when: int(kernel.stdout[0]) < 4
+  
+
+- name: install shadowsocks related soft
+  yum:
+    name: {{ item }}
+    state: latest
+  with_items:
+    - libev
+    - c-ares
+    - libsodium13
+    - mbedtls
+    - rng-tools
+
+- name: config libsodium, add symbol links
+  file:
+    src: /usr/lib64/libmbedcrypto.so.2
+    dest: /usr/lib64/libmbedcrypto.so.0
+    state: link
+    force: yes
+
+- name: copy ss bin
+  unarchive:
+    src: shadowsocks.tgz
+    dest: '{{ SS_DIR }}'
+    creates: '{{ SS_DIR }}/bin/ss-server'
+
+- name: add ss bin symlink
+  file:
+    src: '{{ SS_DIR }}/bin/ss-server'
+    dest: /usr/bin/ss-server
+    state: link
+    force: yes
+
+- name: start ss server
+  shell: ss-server -p {{ SS_PORT}} -k {{ SS_PASSWORD }} -m aes-256-cfb --fast-open -f /tmp/ss.pid
+    args: 
+      chdir: '{{ SS_DIR }}'
+
+- name: start ss when os boot
+  cron:
+    name: "start ss on boot"
+    special_time: reboot
+    job: 'ss-server -p {{ SS_PORT}} -k {{ SS_PASSWORD }} -m aes-256-cfb --fast-open -f /tmp/ss.pid'
