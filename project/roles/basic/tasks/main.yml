@@ -8,14 +8,13 @@
 
 - name: Install basic soft
   yum:
-    name: '{{ item }}'
+    name:
+      - libselinux-python
+      - vim-enhanced
+      - wget
+      - net-tools
+      - bind-utils
     state: latest
-  with_items:
-    - libselinux-python
-    - vim-enhanced
-    - wget
-    - net-tools
-    - bind-utils
 
 - name: Disable SELinux
   selinux:

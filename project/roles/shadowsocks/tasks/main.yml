@@ -6,14 +6,13 @@
   
 - name: install shadowsocks related soft
   yum:
-    name: '{{ item }}'
+    name:
+      - libev
+      - c-ares
+      - libsodium13
+      - mbedtls
+      - rng-tools
     state: latest
-  with_items:
-    - libev
-    - c-ares
-    - libsodium13
-    - mbedtls
-    - rng-tools
 
 - name: config libsodium, add symbol links
   file:
