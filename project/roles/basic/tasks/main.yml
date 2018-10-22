@@ -2,7 +2,6 @@
 
 - name: playbook only works on CentOS 7
   command: /usr/bin/uptime
-  ignore_errors: True
   changed_when: False
   failed_when: ansible_distribution != 'CentOS' or ansible_distribution_major_version != '7'
 
