@@ -12,7 +12,7 @@
       - libsodium13
       - mbedtls
       - rng-tools
-    state: latest
+    state: present
 
 - name: config libsodium, add symbol links
   file:

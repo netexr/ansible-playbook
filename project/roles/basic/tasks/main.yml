@@ -14,7 +14,7 @@
       - wget
       - net-tools
       - bind-utils
-    state: latest
+    state: present
 
 - name: Disable SELinux
   selinux:
