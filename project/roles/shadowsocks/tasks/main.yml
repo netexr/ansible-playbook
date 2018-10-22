@@ -21,16 +21,10 @@
     state: link
     force: yes
 
-- name: create ss dir
-  file:
-    path: '{{ SS_DIR }}'
-    state: directory
-    mode: 0755
-
 - name: copy ss tar file
   unarchive:
     src: shadowsocks.tgz
-    dest: '{{ SS_DIR }}'
+    dest: /usr/local
     creates: '{{ SS_DIR }}/bin/ss-server'
 
 - name: add ss bin symlink
