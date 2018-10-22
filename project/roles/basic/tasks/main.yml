@@ -4,11 +4,11 @@
   command: /usr/bin/uptime
   ignore_errors: True
   changed_when: False
-  failed_when: ansible_distribution != 'CentOS' or ansible_distribution_major_version != 7
+  failed_when: ansible_distribution != 'CentOS' or ansible_distribution_major_version != '7'
 
 - name: Install basic soft
   yum:
-    name: {{ item }}
+    name: '{{ item }}'
     state: latest
   with_items:
     - libselinux-python
