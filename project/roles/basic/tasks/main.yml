@@ -5,6 +5,12 @@
   changed_when: False
   failed_when: ansible_distribution != 'CentOS' or ansible_distribution_major_version != '7'
 
+- name: set locale
+  file:
+    src: environment
+    dest: /etc/environment
+    state: file
+
 - name: Install basic soft
   yum:
     name:
