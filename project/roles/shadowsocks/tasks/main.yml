@@ -1,4 +1,7 @@
 ---
+# TODO: 
+# 1. use config file, restart ss-server when config file changed
+# 2. skip ss-server start action when process exits 
 
 - name: update kernel
   include: kernel.yml

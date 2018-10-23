@@ -1,5 +1,9 @@
 ---
 
+# TODO:
+# 1. upload ssh public key
+# 2. change ssh default port
+
 - name: playbook only works on CentOS 7
   command: /usr/bin/uptime
   changed_when: False
