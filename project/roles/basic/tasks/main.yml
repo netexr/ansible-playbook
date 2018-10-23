@@ -6,7 +6,7 @@
 
 - name: Check if we're using the inventory-provided SSH port
   wait_for:
-    port: "{{ ansible_port }}"
+    port: "{{ ansible_port | default(22) }}"
     state: "started"
     host: "{{ inventory_hostname }}"
     connect_timeout: "5"
@@ -14,7 +14,7 @@
   delegate_to: "localhost"
   ignore_errors: "yes"
   register: default_ssh
-  when: SSH_PORT is defined and ansible_port != SSH_PORT
+  when: SSH_PORT is defined
 
 - name: use new ssh port
   set_fact:
