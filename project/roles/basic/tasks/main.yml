@@ -14,11 +14,15 @@
   delegate_to: "localhost"
   ignore_errors: "yes"
   register: default_ssh
+  when: SSH_PORT is defined and ansible_ssh_port != SSH_PORT
 
 - name: use new ssh port
   set_fact:
     ansible_ssh_port: "{{ SSH_PORT }}"
-  when: default_ssh.failed
+  when: default_ssh.failed is defined
+
+- name: get vars
+  setup:
 
 - name: playbook only works on CentOS 7
   command: /usr/bin/uptime
