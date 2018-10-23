@@ -1,0 +1,15 @@
+---
+
+- name: change ssh default port
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "^Port"
+    line: "Port {{ SSH_PORT }}"
+  notify: "restart sshd"
+
+- name: do ssh restart first
+  meta: flush_handlers
+
+- name: use new ssh port
+  set_fact:
+    ansible_ssh_port: "{{ SSH_PORT }}"

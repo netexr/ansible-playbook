@@ -2,7 +2,23 @@
 
 # TODO:
 # 1. upload ssh public key
-# 2. change ssh default port
+# 2. change ssh default port [done]
+
+- name: Check if we're using the inventory-provided SSH port
+  wait_for:
+    port: "{{ ansible_ssh_port }}"
+    state: "started"
+    host: "{{ inventory_hostname }}"
+    connect_timeout: "5"
+    timeout: "10"
+  delegate_to: "localhost"
+  ignore_errors: "yes"
+  register: default_ssh
+
+- name: use new ssh port
+  set_fact:
+    ansible_ssh_port: "{{ SSH_PORT }}"
+  when: default_ssh.failed
 
 - name: playbook only works on CentOS 7
   command: /usr/bin/uptime
@@ -14,6 +30,10 @@
     src: environment
     dest: /etc/environment
     state: file
+
+- name: change ssh default port if needed
+  include: ssh.yml
+  when: SSH_PORT is defined and ansible_ssh_port != SSH_PORT
 
 - name: Install basic soft
   yum:
